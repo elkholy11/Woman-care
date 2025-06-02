@@ -1,37 +1,46 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Models\Review;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReviewRequest;
+use App\Http\Requests\User\ReviewRequest;
 use App\Http\Resources\ReviewResource;
 
 class ReviewController extends Controller
 {
     public function index()
     {
-        return ReviewResource::collection(
-            Review::with('product')->where('user_id', auth()->id())->get()
-        );
+        $reviews = Review::where('user_id', auth()->id())->with('product')->get();
+        return ReviewResource::collection($reviews);
     }
 
     public function store(ReviewRequest $request)
     {
-        $review = Review::create([
-            'user_id'    => auth()->id(),
-            'product_id' => $request->product_id,
-            'rating'     => $request->rating,
-            'comment'    => $request->comment,
-        ]);
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        $review = Review::create($data);
 
         return new ReviewResource($review->load('product'));
     }
+
     public function show(Review $review)
     {
         if ($review->user_id !== auth()->id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
+
+        return new ReviewResource($review->load('product'));
+    }
+
+    public function update(ReviewRequest $request, Review $review)
+    {
+        if ($review->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $review->update($request->validated());
 
         return new ReviewResource($review->load('product'));
     }
@@ -43,7 +52,6 @@ class ReviewController extends Controller
         }
 
         $review->delete();
-        return response()->json(['message' => 'Review deleted']);
+        return response()->json(['message' => 'Review deleted successfully']);
     }
 }
-

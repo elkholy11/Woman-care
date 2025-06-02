@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
-use App\Models\Product;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Models\Product;
+use App\Http\Requests\Admin\ProductRequest;
 use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
@@ -34,7 +34,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return response()->json(['message' => 'Product deleted']);
+        return response()->json(['message' => 'Deleted']);
     }
 }
 

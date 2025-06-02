@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,10 +22,10 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
 
-        if ($this->isMethod('put') || $this->isMethod('patch')) {
-        return [
-            'status' => 'required|in:pending,processing,delivered,cancelled',
-        ];
+      //  if ($this->isMethod('put') || $this->isMethod('patch')) {
+       // return [
+       //     'status' => 'required|in:pending,processing,delivered,cancelled',
+        //];
         return [
             
             'items'  => 'required|array|min:1',
@@ -34,5 +34,5 @@ class OrderRequest extends FormRequest
         ];
     }
 }
-}
+//}
 

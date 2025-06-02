@@ -1,11 +1,9 @@
 <?php
 
-// app/Http/Controllers/Api/OrderController.php
-
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OrderRequest;
+use App\Http\Requests\Admin\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
@@ -15,7 +13,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['items.product'])->where('user_id', auth()->id())->get();
+        $orders = Order::with(['items.product', 'user'])->get(); // عرض كل الطلبات
         return OrderResource::collection($orders);
     }
 
@@ -95,10 +93,6 @@ class OrderController extends Controller
         'order' => new OrderResource($order)
     ]);
 }
-
-    
-
-
     public function destroy(Order $order)
     {
         $this->authorize('delete', $order); // optional
@@ -108,5 +102,3 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order deleted']);
     }
 }
-
-

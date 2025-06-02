@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api;
-
-use App\Models\Brand;
+namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BrandRequest;
+use App\Models\Brand;
+use App\Http\Requests\Admin\BrandRequest;
 use App\Http\Resources\BrandResource;
 
 class BrandController extends Controller
@@ -34,7 +33,7 @@ class BrandController extends Controller
     public function destroy(Brand $brand)
     {
         $brand->delete();
-        return response()->json(['message' => 'Brand deleted']);
+        return response()->json(['message' => 'Deleted']);
     }
 }
 
